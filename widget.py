@@ -5,18 +5,18 @@
 from __future__ import division
 from __future__ import print_function
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
-from PyQt4 import Qt
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
     
-class Dock(QtGui.QDockWidget):
+class Dock(QtWidgets.QDockWidget):
     """ dock """
     def __init__(self, widget, title, lock=False):
-        QtGui.QDockWidget.__init__(self, title)
+        QtWidgets.QDockWidget.__init__(self, title)
         if lock:
-            self.setTitleBarWidget(QtGui.QWidget())
-            self.setFeatures(QtGui.QDockWidget.NoDockWidgetFeatures)
+            self.setTitleBarWidget(QtWidgets.QWidget())
+            self.setFeatures(QtWidgets.QDockWidget.NoDockWidgetFeatures)
         self.setWidget(widget)
         
     def lock(self, state):
@@ -25,25 +25,25 @@ class Dock(QtGui.QDockWidget):
                 self.setTitleBarWidget(None)
                 self.setAllowedAreas(QtCore.Qt.NoDockWidgetArea)
             else:
-                self.setTitleBarWidget(QtGui.QWidget())
-                self.setFeatures(QtGui.QDockWidget.NoDockWidgetFeatures)
+                self.setTitleBarWidget(QtWidgets.QWidget())
+                self.setFeatures(QtWidgets.QDockWidget.NoDockWidgetFeatures)
         else:
-            self.setFeatures(QtGui.QDockWidget.AllDockWidgetFeatures)
+            self.setFeatures(QtWidgets.QDockWidget.AllDockWidgetFeatures)
             self.setTitleBarWidget(None)
             self.setAllowedAreas(QtCore.Qt.AllDockWidgetAreas)
             
     
-class Label(QtGui.QLabel):
+class Label(QtWidgets.QLabel):
     """ Label """
     def __init__(self, tooltip):
-        QtGui.QLabel.__init__(self)
+        QtWidgets.QLabel.__init__(self)
         self.setToolTip(tooltip)
         
     
-class Button(QtGui.QToolButton):
+class Button(QtWidgets.QToolButton):
     """ button """
     def __init__(self, tooltip, icon, connection, checkable=False):
-        QtGui.QToolButton.__init__(self)
+        QtWidgets.QToolButton.__init__(self)
         self.setToolTip(tooltip)
         self.setAutoRaise(True)
         self.setCheckable(checkable)
@@ -77,11 +77,11 @@ class Background(QtGui.QPixmap):
             p.fillRect (0, 0, size.width(), size.height(), brush)
 
 
-class Viewer(QtGui.QScrollArea):
+class Viewer(QtWidgets.QScrollArea):
     """ QScrollArea you can move with midbutton"""
     resyzing = QtCore.pyqtSignal(tuple)
     def __init__ (self):
-        QtGui.QScrollArea.__init__(self)
+        QtWidgets.QScrollArea.__init__(self)
         
     def event(self, event):
         """ capture middle mouse event to move the view """
@@ -101,4 +101,4 @@ class Viewer(QtGui.QScrollArea):
             return True
         elif (event.type() == QtCore.QEvent.Resize):
             self.resyzing.emit((event.size().width(), event.size().height()))
-        return QtGui.QScrollArea.event(self, event)
+        return QtWidgets.QScrollArea.event(self, event)

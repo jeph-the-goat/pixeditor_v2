@@ -2,46 +2,46 @@
 #-*- coding: utf-8 -*-
 
 import os
-from PyQt4 import QtCore
-from PyQt4 import QtGui
-from PyQt4 import Qt
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 from colorPicker import ColorDialog
 from widget import Background
 from import_export import import_palette
 
 
-class BackgroundDialog(QtGui.QDialog):
+class BackgroundDialog(QtWidgets.QDialog):
     def __init__(self, color=QtGui.QColor(150, 150, 150), arg=16):
         """ color: QColor is the background color
             arg can be
                 int: square pattern, arg is the size
                 str: custom pattern, arg is the filename
         """
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.setWindowTitle("background")
         ### color ###
         self.color = color
-        self.colorL = QtGui.QLabel("color :")
+        self.colorL = QtWidgets.QLabel("color :")
         self.colorIcon = QtGui.QPixmap(40, 20)
         self.colorIcon.fill(self.color)
-        self.colorW = QtGui.QToolButton(self)
+        self.colorW = QtWidgets.QToolButton(self)
         self.colorW.setAutoRaise(True)
         self.colorW.setIcon(QtGui.QIcon(self.colorIcon))
         self.colorW.setIconSize(QtCore.QSize(46, 26))
         ### preview ###
         self.preview = QtGui.QPixmap(128, 128)
         self.preview.fill(self.color)
-        self.previewL = QtGui.QLabel()
+        self.previewL = QtWidgets.QLabel()
         self.previewL.setPixmap(self.preview)
         
         ### square pattern ###
-        self.squareRadio = QtGui.QRadioButton("square", self)
-        self.sizeL = QtGui.QLabel("size :")
-        self.sizeW = QtGui.QLineEdit("16", self)
+        self.squareRadio = QtWidgets.QRadioButton("square", self)
+        self.sizeL = QtWidgets.QLabel("size :")
+        self.sizeW = QtWidgets.QLineEdit("16", self)
         self.sizeW.setValidator(QtGui.QIntValidator(self.sizeW))
         
         ### file pattern ###
-        self.fileRadio = QtGui.QRadioButton("file", self)
+        self.fileRadio = QtWidgets.QRadioButton("file", self)
         ### model to store images ###
         self.modImgList = QtGui.QStandardItemModel(0, 1)
         for f in os.listdir(os.path.join("resources", "pattern")):
@@ -85,13 +85,13 @@ class BackgroundDialog(QtGui.QDialog):
         self.imgList.selectionModel().selectionChanged.connect(self.fileChanged)
         
         ### apply, undo ###
-        self.cancelW = QtGui.QPushButton('cancel', self)
+        self.cancelW = QtWidgets.QPushButton('cancel', self)
         self.cancelW.clicked.connect(self.cancelClicked)
-        self.okW = QtGui.QPushButton('ok', self)
+        self.okW = QtWidgets.QPushButton('ok', self)
         self.okW.clicked.connect(self.okClicked)
         self.okW.setDefault(True)
 
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
         grid.setSpacing(4)
         grid.addWidget(self.colorL, 0, 1)
         grid.addWidget(self.colorW, 0, 2)
@@ -105,12 +105,12 @@ class BackgroundDialog(QtGui.QDialog):
         
         grid.addWidget(self.previewL, 0, 3, 4, 1)
 
-        okBox = QtGui.QHBoxLayout()
+        okBox = QtWidgets.QHBoxLayout()
         okBox.addStretch(0)
         okBox.addWidget(self.cancelW)
         okBox.addWidget(self.okW)
 
-        vBox = QtGui.QVBoxLayout()
+        vBox = QtWidgets.QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addStretch(0)
         vBox.addLayout(okBox)
@@ -174,21 +174,21 @@ class BackgroundDialog(QtGui.QDialog):
                 return self.color, self.fileName
         return None, None
 
-class NewDialog(QtGui.QDialog):
+class NewDialog(QtWidgets.QDialog):
     def __init__(self, size=QtCore.QSize(64, 64)):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.setWindowTitle("new animation")
 
         ### instructions ###
-        self.instL = QtGui.QLabel("Enter the size of the new animation :")
+        self.instL = QtWidgets.QLabel("Enter the size of the new animation :")
         ### width ###
-        self.wL = QtGui.QLabel("width")
-        self.wW = QtGui.QSpinBox(self)
+        self.wL = QtWidgets.QLabel("width")
+        self.wW = QtWidgets.QSpinBox(self)
         self.wW.setRange(1, 100000)
         self.wW.setValue(size.width())
         ### height ###
-        self.hL = QtGui.QLabel("height")
-        self.hW = QtGui.QSpinBox(self)
+        self.hL = QtWidgets.QLabel("height")
+        self.hW = QtWidgets.QSpinBox(self)
         self.hW.setRange(1, 100000)
         self.hW.setValue(size.width())
         
@@ -198,19 +198,19 @@ class NewDialog(QtGui.QDialog):
         ls.sort()
         self.paletteDict = {}
             
-        self.paletteW = QtGui.QComboBox(self)
+        self.paletteW = QtWidgets.QComboBox(self)
         for i in ls:
             self.paletteDict[os.path.splitext(i)[0]] = os.path.join(palettePath, i)
             self.paletteW.addItem(os.path.splitext(i)[0])
             
         ### apply, undo ###
-        self.cancelW = QtGui.QPushButton('cancel', self)
+        self.cancelW = QtWidgets.QPushButton('cancel', self)
         self.cancelW.clicked.connect(self.cancelClicked)
-        self.newW = QtGui.QPushButton('new', self)
+        self.newW = QtWidgets.QPushButton('new', self)
         self.newW.clicked.connect(self.newClicked)
         self.newW.setDefault(True)
 
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
         grid.setSpacing(4)
         grid.addWidget(self.instL, 0, 0, 1, 2)
         grid.addWidget(self.wL, 1, 0)
@@ -219,12 +219,12 @@ class NewDialog(QtGui.QDialog):
         grid.addWidget(self.hW, 2, 1)
         grid.addWidget(self.paletteW, 3, 0, 1, 2)
 
-        okBox = QtGui.QHBoxLayout()
+        okBox = QtWidgets.QHBoxLayout()
         okBox.addStretch(0)
         okBox.addWidget(self.cancelW)
         okBox.addWidget(self.newW)
 
-        vBox = QtGui.QVBoxLayout()
+        vBox = QtWidgets.QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addStretch(0)
         vBox.addLayout(okBox)
@@ -245,48 +245,48 @@ class NewDialog(QtGui.QDialog):
             return self.size, self.palette
         return None, None
 
-class CropDialog(QtGui.QDialog):
+class CropDialog(QtWidgets.QDialog):
     def __init__(self, size):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.setWindowTitle("crop animation")
 
         ### instructions ###
-        self.wL = QtGui.QLabel("width")
+        self.wL = QtWidgets.QLabel("width")
         self.wL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.hL = QtGui.QLabel("height")
+        self.hL = QtWidgets.QLabel("height")
         self.hL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.actualSizeL = QtGui.QLabel("Actual size")
+        self.actualSizeL = QtWidgets.QLabel("Actual size")
         self.actualSizeL.setAlignment(QtCore.Qt.AlignCenter)
-        self.actualWL = QtGui.QLabel(str(size.width()))
-        self.actualHL = QtGui.QLabel(str(size.height()))
-        self.newSizeL = QtGui.QLabel("New size")
+        self.actualWL = QtWidgets.QLabel(str(size.width()))
+        self.actualHL = QtWidgets.QLabel(str(size.height()))
+        self.newSizeL = QtWidgets.QLabel("New size")
         self.newSizeL.setAlignment(QtCore.Qt.AlignCenter)
-        self.newWW = QtGui.QLineEdit(str(size.width()), self)
+        self.newWW = QtWidgets.QLineEdit(str(size.width()), self)
         self.newWW.setValidator(QtGui.QIntValidator(self.newWW))
-        self.newHW = QtGui.QLineEdit(str(size.height()), self)
+        self.newHW = QtWidgets.QLineEdit(str(size.height()), self)
         self.newHW.setValidator(QtGui.QIntValidator(self.newHW))
         ### offset ###
-        self.offsetL = QtGui.QLabel("offset")
+        self.offsetL = QtWidgets.QLabel("offset")
         self.offsetL.setAlignment(QtCore.Qt.AlignCenter)
-        self.horizontalL = QtGui.QLabel("horizontal")
+        self.horizontalL = QtWidgets.QLabel("horizontal")
         self.horizontalL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.horizontalOffsetW = QtGui.QLineEdit(str(0), self)
+        self.horizontalOffsetW = QtWidgets.QLineEdit(str(0), self)
         self.horizontalOffsetW.setValidator(QtGui.QIntValidator(self.horizontalOffsetW))
-        self.verticalL = QtGui.QLabel("vertical")
+        self.verticalL = QtWidgets.QLabel("vertical")
         self.verticalL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.verticalOffsetW = QtGui.QLineEdit(str(0), self)
+        self.verticalOffsetW = QtWidgets.QLineEdit(str(0), self)
         self.verticalOffsetW.setValidator(QtGui.QIntValidator(self.verticalOffsetW))
 
         ### error ###
-        self.errorL = QtGui.QLabel("")
+        self.errorL = QtWidgets.QLabel("")
         ### apply, undo ###
-        self.cancelW = QtGui.QPushButton('cancel', self)
+        self.cancelW = QtWidgets.QPushButton('cancel', self)
         self.cancelW.clicked.connect(self.cancelClicked)
-        self.cropW = QtGui.QPushButton('crop', self)
+        self.cropW = QtWidgets.QPushButton('crop', self)
         self.cropW.clicked.connect(self.cropClicked)
         self.cropW.setDefault(True)
 
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
         grid.setSpacing(8)
         grid.addWidget(self.wL, 1, 0)
         grid.addWidget(self.hL, 2, 0)
@@ -308,12 +308,12 @@ class CropDialog(QtGui.QDialog):
 
         grid.addWidget(self.errorL, 6, 0, 1, 3)
 
-        okBox = QtGui.QHBoxLayout()
+        okBox = QtWidgets.QHBoxLayout()
         okBox.addStretch(0)
         okBox.addWidget(self.cancelW)
         okBox.addWidget(self.cropW)
 
-        vBox = QtGui.QVBoxLayout()
+        vBox = QtWidgets.QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addStretch(0)
         vBox.addLayout(okBox)
@@ -349,44 +349,44 @@ class CropDialog(QtGui.QDialog):
         if self.result():
             return self.rect
 
-class ResizeDialog(QtGui.QDialog):
+class ResizeDialog(QtWidgets.QDialog):
     
     def __init__(self, size):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.setWindowTitle("resize animation")
         self.size = size
         self.nSize = None
         
         self.factor = 1
-        self.factorW = QtGui.QComboBox(self)
+        self.factorW = QtWidgets.QComboBox(self)
         self.factorW.addItems(["1/4", "1/3", "1/2", "1", "2", "3", "4"])
         self.factorW.setCurrentIndex(3)
         self.factorW.activated[str].connect(self.factorClicked)
         
         ### width ###
-        self.wL = QtGui.QLabel("width")
-        self.wW = QtGui.QSpinBox(self)
+        self.wL = QtWidgets.QLabel("width")
+        self.wW = QtWidgets.QSpinBox(self)
         self.wW.setRange(1, 100000)
         self.wW.setValue(self.size.width())
-        self.exWL = QtGui.QLabel(str(self.size.width()))
+        self.exWL = QtWidgets.QLabel(str(self.size.width()))
         ### height ###
-        self.hL = QtGui.QLabel("height")
-        self.hW = QtGui.QSpinBox(self)
+        self.hL = QtWidgets.QLabel("height")
+        self.hW = QtWidgets.QSpinBox(self)
         self.hW.setRange(1, 100000)
         self.hW.setValue(self.size.height())
-        self.exHL = QtGui.QLabel(str(self.size.height()))
+        self.exHL = QtWidgets.QLabel(str(self.size.height()))
         
         self.wW.valueChanged.connect(self.valueChanged)
         self.hW.valueChanged.connect(self.valueChanged)
         
         ### apply, undo ###
-        self.cancelW = QtGui.QPushButton('cancel', self)
+        self.cancelW = QtWidgets.QPushButton('cancel', self)
         self.cancelW.clicked.connect(self.cancelClicked)
-        self.resizeW = QtGui.QPushButton('resize', self)
+        self.resizeW = QtWidgets.QPushButton('resize', self)
         self.resizeW.clicked.connect(self.resizeClicked)
         self.resizeW.setDefault(True)
 
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
         grid.setSpacing(8)
         grid.addWidget(self.factorW, 0, 1, 1, 2)
         grid.addWidget(self.wL, 1, 0)
@@ -398,12 +398,12 @@ class ResizeDialog(QtGui.QDialog):
         grid.addWidget(self.wW, 1, 2)
         grid.addWidget(self.hW, 2, 2)
 
-        okBox = QtGui.QHBoxLayout()
+        okBox = QtWidgets.QHBoxLayout()
         okBox.addStretch(0)
         okBox.addWidget(self.cancelW)
         okBox.addWidget(self.resizeW)
 
-        vBox = QtGui.QVBoxLayout()
+        vBox = QtWidgets.QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addStretch(0)
         vBox.addLayout(okBox)
@@ -440,29 +440,29 @@ class ResizeDialog(QtGui.QDialog):
         if self.result() and self.nSize:
             return self.nSize
 
-class RenameLayerDialog(QtGui.QDialog):
+class RenameLayerDialog(QtWidgets.QDialog):
     def __init__(self, name):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.setWindowTitle("rename layer")
 
         self.name = name
         ### instructions ###
-        self.instL = QtGui.QLabel("Enter the new name of the layer :")
-        self.nameW = QtGui.QLineEdit(name, self)
+        self.instL = QtWidgets.QLabel("Enter the new name of the layer :")
+        self.nameW = QtWidgets.QLineEdit(name, self)
         ### error ###
-        self.errorL = QtGui.QLabel("")
+        self.errorL = QtWidgets.QLabel("")
         ### apply, undo ###
-        self.cancelW = QtGui.QPushButton('cancel', self)
+        self.cancelW = QtWidgets.QPushButton('cancel', self)
         self.cancelW.clicked.connect(self.cancelClicked)
-        self.renameW = QtGui.QPushButton('rename', self)
+        self.renameW = QtWidgets.QPushButton('rename', self)
         self.renameW.clicked.connect(self.renameClicked)
         self.renameW.setDefault(True)
-        okBox = QtGui.QHBoxLayout()
+        okBox = QtWidgets.QHBoxLayout()
         okBox.addStretch(0)
         okBox.addWidget(self.cancelW)
         okBox.addWidget(self.renameW)
 
-        vBox = QtGui.QVBoxLayout()
+        vBox = QtWidgets.QVBoxLayout()
         vBox.addWidget(self.instL)
         vBox.addWidget(self.nameW)
         vBox.addWidget(self.errorL)
@@ -488,7 +488,7 @@ class RenameLayerDialog(QtGui.QDialog):
 
 if __name__ == '__main__':
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     #~ mainWin = RenameLayerDialog("layer 1")
     mainWin = ResizeDialog(QtCore.QSize(24, 32))
     #~ mainWin = NewDialog()

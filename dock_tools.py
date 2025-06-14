@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from widget import Button, Label
 
 
-class ToolsWidget(QtGui.QWidget):
+class ToolsWidget(QtWidgets.QWidget):
     """ widget cantaining tools buttons """
     def __init__(self, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.project = project
         ### coordinates ###
         self.coords = Label("Cursor coordinates")
@@ -24,7 +23,7 @@ class ToolsWidget(QtGui.QWidget):
         self.moveB = Button("move (4)", "icons/tool_move.png", self.moveClicked, True)
         self.selectB = Button("select (5)", "icons/tool_select.png", self.selectClicked, True)
         ### Layout ###
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(0)
         layout.addWidget(self.coords)
         layout.addWidget(self.penB)

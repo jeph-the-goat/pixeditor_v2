@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from widget import Button, Viewer
 from colorPicker import ColorDialog
 
 
-class PaletteCanvas(QtGui.QWidget):
+class PaletteCanvas(QtWidgets.QWidget):
     """ Canvas where the palette is draw """
     def __init__(self, parent):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.parent = parent
         self.setFixedSize(164, 644)
         self.background = QtGui.QBrush(self.parent.project.bgColor)
@@ -49,7 +50,7 @@ class PaletteCanvas(QtGui.QWidget):
             item = self.getItem(event.x(), event.y())
             if item is not None:
                 self.parent.editColor(item)
-        return QtGui.QWidget.event(self, event)
+        return QtWidgets.QWidget.event(self, event)
         
     def getItem(self, x, y):
         x, y = ((x-2) // 20), ((y-2) // 20)
@@ -62,10 +63,10 @@ class PaletteCanvas(QtGui.QWidget):
         return None
 
 
-class PaletteWidget(QtGui.QWidget):
+class PaletteWidget(QtWidgets.QWidget):
     """ widget containing palette """
     def __init__(self, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.project = project
         ### palette ###
         self.paletteCanvas = PaletteCanvas(self)
@@ -80,13 +81,13 @@ class PaletteWidget(QtGui.QWidget):
         moveLeftColorB = Button("move color left", "icons/color_move_left.png", self.moveColorLeft)
         moveRightColorB = Button("move color right", "icons/color_move_right.png", self.moveColorRight)
         ### layout ###
-        colorButtons = QtGui.QHBoxLayout()
+        colorButtons = QtWidgets.QHBoxLayout()
         colorButtons.setSpacing(0)
         colorButtons.addWidget(addColorB)
         colorButtons.addWidget(delColorB)
         colorButtons.addWidget(moveLeftColorB)
         colorButtons.addWidget(moveRightColorB)
-        self.layout = QtGui.QVBoxLayout()
+        self.layout = QtWidgets.QVBoxLayout()
         self.layout.setSpacing(0)
         self.layout.addWidget(self.paletteV)
         self.layout.addLayout(colorButtons)

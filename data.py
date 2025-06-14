@@ -3,8 +3,9 @@
 
 import sys
 import os
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 import xml.etree.ElementTree as ET
 
@@ -762,13 +763,13 @@ class Canvas(QtGui.QImage):
             color = 0
         if  (button == QtCore.Qt.LeftButton and (self.project.tool == "pipette" or
              (self.project.tool == "pen" or self.project.tool == "fill") and
-             QtGui.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier) and 
+             QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier) and 
              self.rect().contains(point)):
             self.project.changeColor(self.pixelIndex(point))
             self.lastPoint = False
         elif self.project.tool == "pen":
             self.project.saveToUndo("canvas")
-            if QtGui.QApplication.keyboardModifiers() == QtCore.Qt.ShiftModifier and self.lastPoint:
+            if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ShiftModifier and self.lastPoint:
                 self.drawLine(point, color)
             else:
                 self.drawPoint(point, color)
@@ -788,7 +789,7 @@ class Canvas(QtGui.QImage):
             color = 0
         if  (button == QtCore.Qt.LeftButton and (self.project.tool == "pipette" or
              (self.project.tool == "pen" or self.project.tool == "fill") and
-             QtGui.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier) and 
+             QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier) and 
              self.rect().contains(point)):
             self.project.changeColor(self.pixelIndex(point))
             self.lastPoint = False

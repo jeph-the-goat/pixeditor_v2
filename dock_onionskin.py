@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from widget import Button
 from colorPicker import ColorDialog
@@ -14,9 +15,9 @@ from colorPicker import ColorDialog
                           "next_color" : QtGui.QColor(0, 0, 255),
                           "next"       : [[True, 0.5], [False, 0.25], [False, 0.125]]}
 """
-class OnionSkinWidget(QtGui.QWidget):
+class OnionSkinWidget(QtWidgets.QWidget):
     def __init__(self, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.project = project
         
         # color
@@ -26,7 +27,7 @@ class OnionSkinWidget(QtGui.QWidget):
             QtGui.QIcon(self.prevcolorIcon), self.prevColorChanged)
         self.colorPrevB.setIconSize(QtCore.QSize(36, 20))
         
-        self.colorCheck = QtGui.QCheckBox(self)
+        self.colorCheck = QtWidgets.QCheckBox(self)
         self.colorCheck.setToolTip("colored onion skin")
         self.colorCheck.setChecked(self.project.onionSkin["color"])
         self.colorCheck.stateChanged.connect(self.checkColor)
@@ -39,29 +40,29 @@ class OnionSkinWidget(QtGui.QWidget):
         
         # onionskin
         prev = self.project.onionSkin["prev"]
-        self.prev1Slider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.prev1Slider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.prev1Slider.setRange(0, 100)
-        self.prev1Slider.setValue(prev[0][1] * 100)
+        self.prev1Slider.setValue(int(prev[0][1] * 100))
         self.prev1Slider.valueChanged.connect(self.valueChanged)
-        self.prev1Check = QtGui.QCheckBox(self)
+        self.prev1Check = QtWidgets.QCheckBox(self)
         self.prev1Check.setChecked(prev[0][0])
         self.prev1Check.stateChanged.connect(self.valueChanged)
-        self.prev2Slider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.prev2Slider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.prev2Slider.setRange(0, 100)
-        self.prev2Slider.setValue(prev[1][1] * 100)
+        self.prev2Slider.setValue(int(prev[1][1] * 100))
         self.prev2Slider.valueChanged.connect(self.valueChanged)
-        self.prev2Check = QtGui.QCheckBox(self)
+        self.prev2Check = QtWidgets.QCheckBox(self)
         self.prev2Check.setChecked(prev[1][0])
         self.prev2Check.stateChanged.connect(self.valueChanged)
-        self.prev3Slider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.prev3Slider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.prev3Slider.setRange(0, 100)
-        self.prev3Slider.setValue(prev[2][1] * 100)
+        self.prev3Slider.setValue(int(prev[2][1] * 100))
         self.prev3Slider.valueChanged.connect(self.valueChanged)
-        self.prev3Check = QtGui.QCheckBox(self)
+        self.prev3Check = QtWidgets.QCheckBox(self)
         self.prev3Check.setChecked(prev[2][0])
         self.prev3Check.stateChanged.connect(self.valueChanged)
         
-        self.currentSlider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.currentSlider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.currentSlider.setRange(0, 100)
         self.currentSlider.setValue(100)
         #self.currentSlider.setDisabled(True)
@@ -69,37 +70,37 @@ class OnionSkinWidget(QtGui.QWidget):
         self.currentSlider.valueChanged.connect(self.valueChanged)
         
         nex = self.project.onionSkin["next"]
-        self.next1Slider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.next1Slider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.next1Slider.setRange(0, 100)
-        self.next1Slider.setValue(nex[0][1] * 100)
+        self.next1Slider.setValue(int(nex[0][1] * 100))
         self.next1Slider.valueChanged.connect(self.valueChanged)
-        self.next1Check = QtGui.QCheckBox(self)
+        self.next1Check = QtWidgets.QCheckBox(self)
         self.next1Check.setChecked(nex[0][0])
         self.next1Check.stateChanged.connect(self.valueChanged)
-        self.next2Slider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.next2Slider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.next2Slider.setRange(0, 100)
-        self.next2Slider.setValue(nex[1][1] * 100)
+        self.next2Slider.setValue(int(nex[1][1] * 100))
         self.next2Slider.valueChanged.connect(self.valueChanged)
-        self.next2Check = QtGui.QCheckBox(self)
+        self.next2Check = QtWidgets.QCheckBox(self)
         self.next2Check.setChecked(nex[1][0])
         self.next2Check.stateChanged.connect(self.valueChanged)
-        self.next3Slider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.next3Slider = QtWidgets.QSlider(QtCore.Qt.Vertical, self)
         self.next3Slider.setRange(0, 100)
-        self.next3Slider.setValue(nex[2][1] * 100)
+        self.next3Slider.setValue(int(nex[2][1] * 100))
         self.next3Slider.valueChanged.connect(self.valueChanged)
-        self.next3Check = QtGui.QCheckBox(self)
+        self.next3Check = QtWidgets.QCheckBox(self)
         self.next3Check.setChecked(nex[2][0])
         self.next3Check.stateChanged.connect(self.valueChanged)
         
         # layout
-        colorLayout = QtGui.QHBoxLayout()
+        colorLayout = QtWidgets.QHBoxLayout()
         colorLayout.setSpacing(0)
         colorLayout.addWidget(self.colorPrevB)
         colorLayout.addStretch()
         colorLayout.addWidget(self.colorCheck)
         colorLayout.addStretch()
         colorLayout.addWidget(self.colorNextB)
-        sliderLayout = QtGui.QGridLayout()
+        sliderLayout = QtWidgets.QGridLayout()
         sliderLayout.setSpacing(0)
         sliderLayout.addWidget(self.prev3Slider, 0, 0)
         sliderLayout.addWidget(self.prev3Check, 1, 0)
@@ -114,7 +115,7 @@ class OnionSkinWidget(QtGui.QWidget):
         sliderLayout.addWidget(self.next2Check, 1, 5)
         sliderLayout.addWidget(self.next3Slider, 0, 6)
         sliderLayout.addWidget(self.next3Check, 1, 6)
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addLayout(colorLayout)
         layout.addLayout(sliderLayout)
         self.setLayout(layout)

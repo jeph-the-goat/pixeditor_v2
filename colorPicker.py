@@ -2,8 +2,9 @@
 #-*- coding: utf-8 -*-
 
 import sys
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 
 def getHue(color):
@@ -13,17 +14,17 @@ def getHue(color):
     else:
         return 0
         
-class SatVal(QtGui.QGraphicsView):
+class SatVal(QtWidgets.QGraphicsView):
     def __init__(self, parent, H, S, V):
-        QtGui.QGraphicsView.__init__(self)
+        QtWidgets.QGraphicsView.__init__(self)
         self.parent = parent
         self.setFixedSize(258, 258)
-        self.setFrameShape(QtGui.QFrame.Box)
-        self.setFrameShadow(QtGui.QFrame.Plain)
+        self.setFrameShape(QtWidgets.QFrame.Box)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setLineWidth(1)
         
-        self.scene = QtGui.QGraphicsScene(self)
-        self.scene.setItemIndexMethod(QtGui.QGraphicsScene.NoIndex)
+        self.scene = QtWidgets.QGraphicsScene(self)
+        self.scene.setItemIndexMethod(QtWidgets.QGraphicsScene.NoIndex)
         self.setScene(self.scene)
         self.scene.setSceneRect(0, 0, 256, 256)
         
@@ -32,7 +33,7 @@ class SatVal(QtGui.QGraphicsView):
         self.colorGrad.setFinalStop(0, 255)
         self.colorGrad.setColorAt(0, QtGui.QColor(255, 255, 255))
         self.colorGrad.setColorAt(1, QtGui.QColor().fromHsv(H, 255, 255))
-        self.colorGradItem = QtGui.QGraphicsRectItem(0, 0, 256, 256)
+        self.colorGradItem = QtWidgets.QGraphicsRectItem(0, 0, 256, 256)
         self.colorGradItem.setBrush(QtGui.QBrush(self.colorGrad))
         self.colorGradItem.setPen(QtGui.QPen(QtCore.Qt.NoPen))
         self.scene.addItem(self.colorGradItem)
@@ -42,12 +43,12 @@ class SatVal(QtGui.QGraphicsView):
         blackGrad.setFinalStop(256, 0)
         blackGrad.setColorAt(0, QtGui.QColor(0, 0, 0))
         blackGrad.setColorAt(1, QtGui.QColor(255, 255, 255, 0))
-        blackGradItem = QtGui.QGraphicsRectItem(0, 0, 256, 256)
+        blackGradItem = QtWidgets.QGraphicsRectItem(0, 0, 256, 256)
         blackGradItem.setBrush(QtGui.QBrush(blackGrad))
         blackGradItem.setPen(QtGui.QPen(QtCore.Qt.NoPen))
         self.scene.addItem(blackGradItem)
         
-        self.pointer = QtGui.QGraphicsPixmapItem(QtGui.QPixmap('icons/color_picker_pointer.png'))
+        self.pointer = QtWidgets.QGraphicsPixmapItem(QtGui.QPixmap('icons/color_picker_pointer.png'))
         self.pointer.setOffset(-5, -5)
         self.pointer.setPos(V, S)
         self.scene.addItem(self.pointer)
@@ -85,16 +86,16 @@ class SatVal(QtGui.QGraphicsView):
             self.move(event.pos())
         
         
-class Hue(QtGui.QGraphicsView):
+class Hue(QtWidgets.QGraphicsView):
     def __init__(self, parent, H):
-        QtGui.QGraphicsView.__init__(self)
+        QtWidgets.QGraphicsView.__init__(self)
         self.parent = parent
         self.setFixedSize(18, 258)
-        self.setFrameShape(QtGui.QFrame.Box)
-        self.setFrameShadow(QtGui.QFrame.Plain)
+        self.setFrameShape(QtWidgets.QFrame.Box)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setLineWidth(1)
         
-        self.scene = QtGui.QGraphicsScene(self)
+        self.scene = QtWidgets.QGraphicsScene(self)
         self.setScene(self.scene)
         self.scene.setSceneRect(0, 0, 16, 256)
         
@@ -108,12 +109,12 @@ class Hue(QtGui.QGraphicsView):
         huegrad.setColorAt(0.66, QtGui.QColor(0, 0, 255))
         huegrad.setColorAt(0.83, QtGui.QColor(255, 0, 255))
         huegrad.setColorAt(1, QtGui.QColor(255, 0, 0))
-        self.hueGradient = QtGui.QGraphicsRectItem(0, 0, 16, 256)
+        self.hueGradient = QtWidgets.QGraphicsRectItem(0, 0, 16, 256)
         self.hueGradient.setBrush(QtGui.QBrush(huegrad))
         self.hueGradient.setPen(QtGui.QColor(0, 0, 0, 0))
         self.scene.addItem(self.hueGradient)
         
-        self.pointer = QtGui.QGraphicsPixmapItem(QtGui.QPixmap('icons/color_picker_slider.png'))
+        self.pointer = QtWidgets.QGraphicsPixmapItem(QtGui.QPixmap('icons/color_picker_slider.png'))
         self.pointer.setOffset(0, -3)
         self.pointer.setPos(0, round(H / 360 * 256))
         self.scene.addItem(self.pointer)
@@ -139,17 +140,17 @@ class Hue(QtGui.QGraphicsView):
             self.move(event.pos())
         
         
-class Alpha(QtGui.QGraphicsView):
+class Alpha(QtWidgets.QGraphicsView):
     def __init__(self, parent, A):
-        QtGui.QGraphicsView.__init__(self)
+        QtWidgets.QGraphicsView.__init__(self)
         self.parent = parent
         self.setFixedSize(18, 258)
-        self.setFrameShape(QtGui.QFrame.Box)
-        self.setFrameShadow(QtGui.QFrame.Plain)
+        self.setFrameShape(QtWidgets.QFrame.Box)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setLineWidth(1)
 
-        self.scene = QtGui.QGraphicsScene(self)
-        self.scene.setItemIndexMethod(QtGui.QGraphicsScene.NoIndex)
+        self.scene = QtWidgets.QGraphicsScene(self)
+        self.scene.setItemIndexMethod(QtWidgets.QGraphicsScene.NoIndex)
         self.setScene(self.scene)
         self.scene.setSceneRect(0, 0, 16, 256)
         self.setBackgroundBrush(QtGui.QBrush(QtGui.QPixmap('icons/color_picker_alpha.png')))
@@ -159,12 +160,12 @@ class Alpha(QtGui.QGraphicsView):
         alphagrad.setFinalStop(0, 255)
         alphagrad.setColorAt(0, QtGui.QColor(255, 255, 255))
         alphagrad.setColorAt(1, QtGui.QColor(255, 255, 255, 0))
-        self.alphaGradient = QtGui.QGraphicsRectItem(0, 0, 16, 256)
+        self.alphaGradient = QtWidgets.QGraphicsRectItem(0, 0, 16, 256)
         self.alphaGradient.setBrush(QtGui.QBrush(alphagrad))
         self.alphaGradient.setPen(QtGui.QColor(0, 0, 0, 0))
         self.scene.addItem(self.alphaGradient)
         
-        self.pointer = QtGui.QGraphicsPixmapItem(QtGui.QPixmap('icons/color_picker_slider.png'))
+        self.pointer = QtWidgets.QGraphicsPixmapItem(QtGui.QPixmap('icons/color_picker_slider.png'))
         self.pointer.setOffset(0, -3)
         self.pointer.setPos(0, A)
         self.scene.addItem(self.pointer)
@@ -190,30 +191,30 @@ class Alpha(QtGui.QGraphicsView):
             self.move(event.pos())
         
         
-class ColorPreview(QtGui.QGraphicsView):
+class ColorPreview(QtWidgets.QGraphicsView):
     def __init__(self, parent, color, ex=True):
-        QtGui.QGraphicsView.__init__(self)
+        QtWidgets.QGraphicsView.__init__(self)
         self.parent = parent
         self.setFixedSize(130, 66)
-        self.setFrameShape(QtGui.QFrame.Box)
-        self.setFrameShadow(QtGui.QFrame.Plain)
+        self.setFrameShape(QtWidgets.QFrame.Box)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setLineWidth(1)
 
-        self.scene = QtGui.QGraphicsScene(self)
-        self.scene.setItemIndexMethod(QtGui.QGraphicsScene.NoIndex)
+        self.scene = QtWidgets.QGraphicsScene(self)
+        self.scene.setItemIndexMethod(QtWidgets.QGraphicsScene.NoIndex)
         self.setScene(self.scene)
         self.scene.setSceneRect(0, 0, 128, 64)
         self.setBackgroundBrush(QtGui.QBrush(QtGui.QPixmap('icons/color_picker_alpha.png')))
         
         if ex:
-            self.exColor = QtGui.QGraphicsRectItem(0, 0, 64, 64)
+            self.exColor = QtWidgets.QGraphicsRectItem(0, 0, 64, 64)
             self.exColor.setBrush(QtGui.QBrush(color))
             self.exColor.setPen(QtGui.QPen(QtCore.Qt.NoPen))
             self.scene.addItem(self.exColor)
             
-            self.newColor = QtGui.QGraphicsRectItem(64, 0, 64, 64)
+            self.newColor = QtWidgets.QGraphicsRectItem(64, 0, 64, 64)
         else:
-            self.newColor = QtGui.QGraphicsRectItem(0, 0, 128, 64)
+            self.newColor = QtWidgets.QGraphicsRectItem(0, 0, 128, 64)
         self.newColor.setBrush(QtGui.QBrush(color))
         self.newColor.setPen(QtGui.QPen(QtCore.Qt.NoPen))
         self.scene.addItem(self.newColor)
@@ -222,10 +223,10 @@ class ColorPreview(QtGui.QGraphicsView):
         self.newColor.setBrush(QtGui.QBrush(color))
         
         
-class ColorDialog(QtGui.QDialog):
+class ColorDialog(QtWidgets.QDialog):
     color_changed = QtCore.pyqtSignal(QtGui.QColor)
     def __init__(self, alpha=True, color=None):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.setWindowTitle("color picker")
         if color is not None:
             if isinstance(color, QtGui.QColor):
@@ -247,47 +248,47 @@ class ColorDialog(QtGui.QDialog):
             self.alpha = None
         self.color_changed.connect(self.colorPreview.color_changed)
         
-        self.hL = QtGui.QLabel("Hue")
+        self.hL = QtWidgets.QLabel("Hue")
         self.hL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.hW = QtGui.QSpinBox()
+        self.hW = QtWidgets.QSpinBox()
         self.hW.setRange(0, 359)
         self.hW.setValue(getHue(self.color))
         self.hW.setWrapping(True)
         self.hW.valueChanged.connect(self.h_changed)
         
-        self.sL = QtGui.QLabel("Saturation")
+        self.sL = QtWidgets.QLabel("Saturation")
         self.sL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.sW = QtGui.QSpinBox()
+        self.sW = QtWidgets.QSpinBox()
         self.sW.setRange(0, 255)
         self.sW.setValue(self.color.saturation())
         self.sW.valueChanged.connect(self.s_changed)
         
-        self.vL = QtGui.QLabel("Value")
+        self.vL = QtWidgets.QLabel("Value")
         self.vL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.vW = QtGui.QSpinBox()
+        self.vW = QtWidgets.QSpinBox()
         self.vW.setRange(0, 255)
         self.vW.setValue(self.color.value())
         self.vW.valueChanged.connect(self.v_changed)
         
         if alpha:
-            self.aL = QtGui.QLabel("Alpha")
+            self.aL = QtWidgets.QLabel("Alpha")
             self.aL.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-            self.aW = QtGui.QSpinBox()
+            self.aW = QtWidgets.QSpinBox()
             self.aW.setRange(0, 255)
             self.aW.setValue(255-self.color.alpha())
             self.aW.valueChanged.connect(self.a_changed)
         
-        self.nameW = QtGui.QLineEdit(self.color.name())
+        self.nameW = QtWidgets.QLineEdit(self.color.name())
         self.nameW.textChanged.connect(self.color_name_changed)
         self.color_changed.connect(self.col_changed)
         
-        self.cancelW = QtGui.QPushButton('cancel', self)
+        self.cancelW = QtWidgets.QPushButton('cancel', self)
         self.cancelW.clicked.connect(self.cancel_clicked)
-        self.okW = QtGui.QPushButton('ok', self)
+        self.okW = QtWidgets.QPushButton('ok', self)
         self.okW.clicked.connect(self.ok_clicked)
         self.okW.setDefault(True)
         
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
         grid.setSpacing(8)
         grid.addWidget(self.satVal, 0, 0, 6, 1)
         grid.addWidget(self.hue, 0, 1, 6, 1)
@@ -306,12 +307,12 @@ class ColorDialog(QtGui.QDialog):
         grid.addWidget(self.nameW, 5, 3, 1, 2)
         grid.setRowStretch(6, 4)
 
-        okBox = QtGui.QHBoxLayout()
+        okBox = QtWidgets.QHBoxLayout()
         okBox.addStretch(0)
         okBox.addWidget(self.cancelW)
         okBox.addWidget(self.okW)
 
-        vBox = QtGui.QVBoxLayout()
+        vBox = QtWidgets.QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addStretch(0)
         vBox.addLayout(okBox)
@@ -405,6 +406,6 @@ class ColorDialog(QtGui.QDialog):
             return False, None
             
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     print(ColorDialog(False).getRgb())
     sys.exit(app.exec_())

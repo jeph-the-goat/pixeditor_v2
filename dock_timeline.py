@@ -2,17 +2,18 @@
 #-*- coding: utf-8 -*-
 
 
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
 from dialogs import RenameLayerDialog
 from widget import Button, Viewer
 
 
-class LayersCanvas(QtGui.QWidget):
+class LayersCanvas(QtWidgets.QWidget):
     """ Widget containing the canvas list """
     def __init__(self, parent):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.parent = parent
         self.setFixedWidth(100)
         
@@ -71,7 +72,7 @@ class LayersCanvas(QtGui.QWidget):
             if item is not None:
                 self.parent.renameLayer(item)
                 self.update()
-        return QtGui.QWidget.event(self, event)
+        return QtWidgets.QWidget.event(self, event)
     
     def layerAt(self, y):
         l = (y - 23) // 20
@@ -79,10 +80,10 @@ class LayersCanvas(QtGui.QWidget):
             return l
             
         
-class TimelineCanvas(QtGui.QWidget):
+class TimelineCanvas(QtWidgets.QWidget):
     """ widget containing the timeline """
     def __init__(self, parent):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.parent = parent
         self.grey = QtGui.QBrush(QtGui.QColor(0, 0, 0, 30))
         self.white = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -114,14 +115,14 @@ class TimelineCanvas(QtGui.QWidget):
                 p.setFont(fontLight)
                 metrics = p.fontMetrics()
                 fw = metrics.width(str(j))
-                p.drawText(i-fw/2, 17, str(j))
+                p.drawText(int(i-fw/2), 17, str(j))
             
             if j % self.parent.project.fps == 0:
                 p.setFont(fontBold)
                 metrics = p.fontMetrics()
                 s = str(j//self.parent.project.fps)
                 fw = metrics.width(s)
-                p.drawText(i-fw/2, 10, s)
+                p.drawText(int(i-fw/2), 10, s)
         
         if self.parent.selection:
             l = self.parent.selection[0]
@@ -207,7 +208,7 @@ class TimelineCanvas(QtGui.QWidget):
                 self.parent.project.curFrame = frame
                 self.parent.project.updateViewSign.emit()
             return True
-        return QtGui.QWidget.event(self, event)
+        return QtWidgets.QWidget.event(self, event)
         
     def isInStrechBox(self, pos):
         for layer, i in enumerate(self.strechBoxList):
@@ -245,10 +246,10 @@ class TimelineCanvas(QtGui.QWidget):
             return l
         
         
-class TimelineWidget(QtGui.QWidget):
+class TimelineWidget(QtWidgets.QWidget):
     """ widget containing timeline, layers and all their buttons """
     def __init__(self, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.project = project
         
         self.selection = False
@@ -292,7 +293,7 @@ class TimelineWidget(QtGui.QWidget):
         self.clearFrameB = Button("clear frame", "icons/frame_clear.png", self.clearFrameClicked)
         
         ### play the animation ###
-        self.fpsW = QtGui.QSpinBox(self)
+        self.fpsW = QtWidgets.QSpinBox(self)
         self.fpsW.setValue(self.project.fps)
         self.fpsW.setRange(1, 60)
         self.fpsW.setSuffix(" fps")
@@ -303,7 +304,7 @@ class TimelineWidget(QtGui.QWidget):
         self.playFrameB.state = "play"
 
         ### layout ###
-        layerTools = QtGui.QVBoxLayout()
+        layerTools = QtWidgets.QVBoxLayout()
         layerTools.setSpacing(0)
         layerTools.addWidget(self.addLayerB)
         layerTools.addWidget(self.dupLayerB)
@@ -311,12 +312,12 @@ class TimelineWidget(QtGui.QWidget):
         layerTools.addWidget(self.mergeLayerB)
         layerTools.addStretch()
         
-        layerTools2 = QtGui.QHBoxLayout()
+        layerTools2 = QtWidgets.QHBoxLayout()
         layerTools2.setSpacing(0)
         layerTools2.addWidget(self.upLayerB)
         layerTools2.addWidget(self.downLayerB)
         
-        canvasTools = QtGui.QHBoxLayout()
+        canvasTools = QtWidgets.QHBoxLayout()
         canvasTools.setSpacing(0)
         canvasTools.addWidget(self.addFrameB)
         canvasTools.addWidget(self.dupFrameB)
@@ -327,7 +328,7 @@ class TimelineWidget(QtGui.QWidget):
         canvasTools.addWidget(self.repeatB)
         canvasTools.addWidget(self.playFrameB)
         
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.setSpacing(4)
         layout.addLayout(layerTools, 0, 0)
         layout.addWidget(self.layersV, 0, 1)

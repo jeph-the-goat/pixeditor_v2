@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 import os
 import xml.etree.ElementTree as ET
@@ -13,7 +14,7 @@ from data import Canvas
 def open_pix(dirName):
     if not dirName:
         dirName = os.path.expanduser("~")
-    url = QtGui.QFileDialog.getOpenFileName(None, "open pix file", dirName, "Pix files (*.pix );;All files (*)")
+    url = QtWidgets.QFileDialog.getOpenFileName(None, "open pix file", dirName, "Pix files (*.pix );;All files (*)")
     if url:
         try:
             save = open(url, "r")
@@ -40,7 +41,7 @@ def get_save_url(dirName=None, ext="pix"):
     if not dirName:
         dirName = os.path.expanduser("~")
     while True:
-        url = str(QtGui.QFileDialog.getSaveFileName(None, "save %s file" %(ext), 
+        url = str(QtWidgets.QFileDialog.getSaveFileName(None, "save %s file" %(ext), 
                                         dirName, "%s files (*.%s )" %(ext, ext)))
         if url:
             dirName = os.path.dirname(url)
@@ -51,23 +52,23 @@ def get_save_url(dirName=None, ext="pix"):
                 if os.path.isfile(url):
                     message = "The file %s allready exist.\n" %(os.path.basename(url))
                     message = "%sDo you want to overwrite it ?" %(message)
-                    messageBox = QtGui.QMessageBox()
+                    messageBox = QtWidgets.QMessageBox()
                     messageBox.setWindowTitle("Overwrite ?")
                     messageBox.setText(message);
-                    messageBox.setIcon(QtGui.QMessageBox.Warning)
-                    messageBox.addButton("Cancel", QtGui.QMessageBox.RejectRole)
-                    messageBox.addButton("Overwrite", QtGui.QMessageBox.AcceptRole)
+                    messageBox.setIcon(QtWidgets.QMessageBox.Warning)
+                    messageBox.addButton("Cancel", QtWidgets.QMessageBox.RejectRole)
+                    messageBox.addButton("Overwrite", QtWidgets.QMessageBox.AcceptRole)
                     ret = messageBox.exec_();
                     if ret:
                         return url
                 else:
                     message = "The file will be save as %s.\n" %(os.path.basename(url))
-                    messageBox = QtGui.QMessageBox()
+                    messageBox = QtWidgets.QMessageBox()
                     messageBox.setWindowTitle("Save ?")
                     messageBox.setText(message);
-                    messageBox.setIcon(QtGui.QMessageBox.Question)
-                    messageBox.addButton("Cancel", QtGui.QMessageBox.RejectRole)
-                    messageBox.addButton("Save", QtGui.QMessageBox.AcceptRole)
+                    messageBox.setIcon(QtWidgets.QMessageBox.Question)
+                    messageBox.addButton("Cancel", QtWidgets.QMessageBox.RejectRole)
+                    messageBox.addButton("Save", QtWidgets.QMessageBox.AcceptRole)
                     ret = messageBox.exec_();
                     if ret:
                         return url
@@ -114,11 +115,11 @@ def import_img(project, urls, size=QtCore.QSize(0, 0), colorTable=[0]):
         text = "Failed to import some files (too much colors):"
         for i in canceled:
             text = "%s\n %s" %(text, i)
-        message = QtGui.QMessageBox()
+        message = QtWidgets.QMessageBox()
         message.setWindowTitle("Import error")
         message.setText(text);
-        message.setIcon(QtGui.QMessageBox.Warning)
-        message.addButton("Ok", QtGui.QMessageBox.AcceptRole)
+        message.setIcon(QtWidgets.QMessageBox.Warning)
+        message.addButton("Ok", QtWidgets.QMessageBox.AcceptRole)
         message.exec_();
     return  size, imgs, colorTable
 
@@ -137,12 +138,12 @@ def export_png_all(project, url):
             else:
                 files.append((fn, sim))
     if fnexist:
-        message = QtGui.QMessageBox()
+        message = QtWidgets.QMessageBox()
         message.setWindowTitle("Overwrite?")
         message.setText("Some filename allready exist.\nDo you want to overwrite them?");
-        message.setIcon(QtGui.QMessageBox.Warning)
-        message.addButton("Cancel", QtGui.QMessageBox.RejectRole)
-        message.addButton("Overwrite", QtGui.QMessageBox.AcceptRole)
+        message.setIcon(QtWidgets.QMessageBox.Warning)
+        message.addButton("Cancel", QtWidgets.QMessageBox.RejectRole)
+        message.addButton("Overwrite", QtWidgets.QMessageBox.AcceptRole)
         ret = message.exec_();
         if ret:
             for i in files:
@@ -154,9 +155,9 @@ def export_png_all(project, url):
 def export_png(project, fullUrl=""):
     isUrl = False
     while not isUrl:
-        fullUrl = QtGui.QFileDialog.getSaveFileName(
+        fullUrl = QtWidgets.QFileDialog.getSaveFileName(
                 None, "export (.png)", fullUrl, "PNG files (*.png)", 
-                QtGui.QFileDialog.DontConfirmOverwrite)
+                QtWidgets.QFileDialog.DontConfirmOverwrite)
         if not fullUrl:
             return
         isUrl = True
@@ -166,12 +167,12 @@ def export_png(project, fullUrl=""):
             fn = "%s%s%s.png" %(url, "0"*(len(str(nFrames))-len(str(i))), i)
             if os.path.isfile(fn):
                 isUrl = False
-                message = QtGui.QMessageBox()
+                message = QtWidgets.QMessageBox()
                 message.setWindowTitle("Overwrite?")
                 message.setText("Some filename allready exist.\nDo you want to overwrite them?");
-                message.setIcon(QtGui.QMessageBox.Warning)
-                message.addButton("Cancel", QtGui.QMessageBox.RejectRole)
-                message.addButton("Overwrite", QtGui.QMessageBox.AcceptRole)
+                message.setIcon(QtWidgets.QMessageBox.Warning)
+                message.addButton("Cancel", QtWidgets.QMessageBox.RejectRole)
+                message.addButton("Overwrite", QtWidgets.QMessageBox.AcceptRole)
                 ret = message.exec_();
                 if ret:
                     isUrl = True
@@ -250,6 +251,6 @@ def export_pen(pen, name):
     
 if __name__ == '__main__':
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     print(get_save_url())
     sys.exit(app.exec_())

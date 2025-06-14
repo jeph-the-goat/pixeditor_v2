@@ -18,8 +18,9 @@
 
 import sys
 import os
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from data import Project
 from dock_timeline import TimelineWidget
@@ -32,17 +33,17 @@ from widget import Dock
 from import_export import *
 from widget import Background
 
-class SelectionRect(QtGui.QGraphicsRectItem):
+class SelectionRect(QtWidgets.QGraphicsRectItem):
     """ Rect item used in scene to display a selection """
     def __init__(self, pos):
-        QtGui.QGraphicsRectItem.__init__(self, pos.x(), pos.y(), 1, 1)
+        QtWidgets.QGraphicsRectItem.__init__(self, pos.x(), pos.y(), 1, 1)
         self.startX = pos.x()
         self.startY = pos.y()
         
         self.setPen(QtGui.QPen(QtGui.QColor("black"), 0))
         dashPen = QtGui.QPen(QtGui.QColor("white"), 0, QtCore.Qt.DashLine)
         dashPen.setDashPattern([6, 6])
-        self.dash = QtGui.QGraphicsRectItem(self.rect(), self)
+        self.dash = QtWidgets.QGraphicsRectItem(self.rect(), self)
         self.dash.setPen(dashPen)
         
     def scale(self, pos):
@@ -67,22 +68,22 @@ class SelectionRect(QtGui.QGraphicsRectItem):
         return QtCore.QRect(x, y, w, h)
         
         
-class Scene(QtGui.QGraphicsView):
+class Scene(QtWidgets.QGraphicsView):
     """ widget used to display the layers, onionskin, pen, background
         it can zoom with mouseWheel, pan with mouseMiddleClic
         it send mouseRightClic info to the current Canvas"""
     def __init__(self, project):
-        QtGui.QGraphicsView.__init__(self)
+        QtWidgets.QGraphicsView.__init__(self)
         self.project = project
         self.zoomN = 1
         self.setAcceptDrops(False)
         # scene
-        self.scene = QtGui.QGraphicsScene(self)
-        self.scene.setItemIndexMethod(QtGui.QGraphicsScene.NoIndex)
+        self.scene = QtWidgets.QGraphicsScene(self)
+        self.scene.setItemIndexMethod(QtWidgets.QGraphicsScene.NoIndex)
         self.setScene(self.scene)
         self.setTransformationAnchor(
-                QtGui.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtGui.QGraphicsView.AnchorViewCenter)
+                QtWidgets.QGraphicsView.AnchorUnderMouse)
+        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorViewCenter)
         self.setMinimumSize(400, 400)
         self.scene.setSceneRect(0, 0, 
                     self.project.size.width(), self.project.size.height())
@@ -110,7 +111,7 @@ class Scene(QtGui.QGraphicsView):
             self.onionNextItems[-1].hide()
         
         # pen
-        self.penItem = QtGui.QGraphicsRectItem(0, 0, 1, 1)
+        self.penItem = QtWidgets.QGraphicsRectItem(0, 0, 1, 1)
         self.penItem.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
         self.penItem.setPen(QtGui.QPen(QtCore.Qt.NoPen))
         self.scene.addItem(self.penItem)
@@ -133,13 +134,13 @@ class Scene(QtGui.QGraphicsView):
             if len(self.project.pen[0]) == 3:
                 for i in self.project.pen:
                     brush = QtGui.QColor(self.project.colorTable[i[2]])
-                    p = QtGui.QGraphicsRectItem(i[0], i[1], 1, 1, self.penItem)
+                    p = QtWidgets.QGraphicsRectItem(i[0], i[1], 1, 1, self.penItem)
                     p.setPen(pen)
                     p.setBrush(brush)
             else:
                 brush = QtGui.QColor(self.project.colorTable[self.project.color])
                 for i in self.project.pen:
-                    p = QtGui.QGraphicsRectItem(i[0], i[1], 1, 1, self.penItem)
+                    p = QtWidgets.QGraphicsRectItem(i[0], i[1], 1, 1, self.penItem)
                     p.setPen(pen)
                     p.setBrush(brush)
                 
@@ -232,7 +233,7 @@ class Scene(QtGui.QGraphicsView):
             self.startScroll = (self.horizontalScrollBar().value(),
                                 self.verticalScrollBar().value())
             self.lastPos = QtCore.QPoint(QtGui.QCursor.pos())
-            self.setDragMode(QtGui.QGraphicsView.NoDrag)
+            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
         # draw on canvas
         elif (self.project.timeline[l].visible
                 and (event.buttons() == QtCore.Qt.LeftButton 
@@ -260,7 +261,7 @@ class Scene(QtGui.QGraphicsView):
                 self.selRect.setZValue(103)
                 self.scene.addItem(self.selRect)
         else:
-            return QtGui.QGraphicsView.mousePressEvent(self, event)
+            return QtWidgets.QGraphicsView.mousePressEvent(self, event)
 
     def mouseMoveEvent(self, event):
         self.penItem.show()
@@ -305,7 +306,7 @@ class Scene(QtGui.QGraphicsView):
             elif self.project.tool == "select": 
                 self.selRect.scale(pos)
         else:
-            return QtGui.QGraphicsView.mouseMoveEvent(self, event)
+            return QtWidgets.QGraphicsView.mouseMoveEvent(self, event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -331,7 +332,7 @@ class Scene(QtGui.QGraphicsView):
                 self.scene.removeItem(self.selRect)
                 del self.selRect
         else:
-            return QtGui.QGraphicsView.mouseReleaseEvent(self, event)
+            return QtWidgets.QGraphicsView.mouseReleaseEvent(self, event)
 
     def enterEvent(self, event):
         self.penItem.show()
@@ -340,11 +341,11 @@ class Scene(QtGui.QGraphicsView):
         self.penItem.hide()
         
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     """ Main windows of the application """
     dropped = QtCore.pyqtSignal(list)
     def __init__(self):
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
         self.setAcceptDrops(True)
         self.dropped.connect(self.importAsLayer)
         
@@ -363,8 +364,8 @@ class MainWindow(QtGui.QMainWindow):
         self.setDockNestingEnabled(True)
         self.setCentralWidget(self.scene)
         
-        QtGui.QApplication.setOrganizationName("pixeditor")
-        QtGui.QApplication.setApplicationName("pixeditor")
+        QtWidgets.QApplication.setOrganizationName("pixeditor")
+        QtWidgets.QApplication.setApplicationName("pixeditor")
         settings = QtCore.QSettings()
         settings.beginGroup("mainWindow")
         try:
@@ -395,23 +396,23 @@ class MainWindow(QtGui.QMainWindow):
 
         ### File menu ###
         menubar = self.menuBar()
-        openAction = QtGui.QAction('Open', self)
+        openAction = QtWidgets.QAction('Open', self)
         openAction.triggered.connect(self.openAction)
-        saveAsAction = QtGui.QAction('Save as', self)
+        saveAsAction = QtWidgets.QAction('Save as', self)
         saveAsAction.triggered.connect(self.saveAsAction)
-        saveAction = QtGui.QAction('Save', self)
+        saveAction = QtWidgets.QAction('Save', self)
         saveAction.triggered.connect(self.saveAction)
         saveAction.setShortcut('Ctrl+S')
         
-        importNewAction = QtGui.QAction('Import as new', self)
+        importNewAction = QtWidgets.QAction('Import as new', self)
         importNewAction.triggered.connect(self.importAsNewAction)
-        importLayerAction = QtGui.QAction('Import as layer', self)
+        importLayerAction = QtWidgets.QAction('Import as layer', self)
         importLayerAction.triggered.connect(self.importAsLayerAction)
-        exportAction = QtGui.QAction('Export', self)
+        exportAction = QtWidgets.QAction('Export', self)
         exportAction.triggered.connect(self.exportAction)
         exportAction.setShortcut('Ctrl+E')
         
-        exitAction = QtGui.QAction('Exit', self)
+        exitAction = QtWidgets.QAction('Exit', self)
         exitAction.triggered.connect(self.close)
         exitAction.setShortcut('Ctrl+Q')
         
@@ -427,20 +428,20 @@ class MainWindow(QtGui.QMainWindow):
         fileMenu.addAction(exitAction)
         
         ### Edit menu ###
-        undoAction = QtGui.QAction('Undo', self)
+        undoAction = QtWidgets.QAction('Undo', self)
         undoAction.triggered.connect(self.project.undo)
         undoAction.setShortcut('Ctrl+Z')
-        redoAction = QtGui.QAction('Redo', self)
+        redoAction = QtWidgets.QAction('Redo', self)
         redoAction.triggered.connect(self.project.redo)
         redoAction.setShortcut('Ctrl+Y')
         
-        cutAction = QtGui.QAction('Cut', self)
+        cutAction = QtWidgets.QAction('Cut', self)
         cutAction.triggered.connect(self.timelineWidget.cut)
         cutAction.setShortcut('Ctrl+X')
-        copyAction = QtGui.QAction('Copy', self)
+        copyAction = QtWidgets.QAction('Copy', self)
         copyAction.triggered.connect(self.timelineWidget.copy)
         copyAction.setShortcut('Ctrl+C')
-        pasteAction = QtGui.QAction('Paste', self)
+        pasteAction = QtWidgets.QAction('Paste', self)
         pasteAction.triggered.connect(self.timelineWidget.paste)
         pasteAction.setShortcut('Ctrl+V')
         
@@ -453,17 +454,17 @@ class MainWindow(QtGui.QMainWindow):
         editMenu.addAction(pasteAction)
         
         ### project menu ###
-        newAction = QtGui.QAction('New', self)
+        newAction = QtWidgets.QAction('New', self)
         newAction.triggered.connect(self.newAction)
-        cropAction = QtGui.QAction('Crop', self)
+        cropAction = QtWidgets.QAction('Crop', self)
         cropAction.triggered.connect(self.cropAction)
-        resizeAction = QtGui.QAction('Resize', self)
+        resizeAction = QtWidgets.QAction('Resize', self)
         resizeAction.triggered.connect(self.resizeAction)
-        replacePaletteAction = QtGui.QAction('Replace palette', self)
+        replacePaletteAction = QtWidgets.QAction('Replace palette', self)
         replacePaletteAction.triggered.connect(self.replacePaletteAction)
-        minimizePaletteAction = QtGui.QAction('Minimize palette', self)
+        minimizePaletteAction = QtWidgets.QAction('Minimize palette', self)
         minimizePaletteAction.triggered.connect(self.minimizePaletteAction)
-        prefAction = QtGui.QAction('Background', self)
+        prefAction = QtWidgets.QAction('Background', self)
         prefAction.triggered.connect(self.backgroundAction)
         
         projectMenu = menubar.addMenu('Project')
@@ -475,11 +476,11 @@ class MainWindow(QtGui.QMainWindow):
         projectMenu.addAction(prefAction)
 
         ### resources menu ###
-        savePaletteAction = QtGui.QAction('save  current palette', self)
+        savePaletteAction = QtWidgets.QAction('save  current palette', self)
         savePaletteAction.triggered.connect(self.savePaletteAction)
-        savePenAction = QtGui.QAction('save custom pen', self)
+        savePenAction = QtWidgets.QAction('save custom pen', self)
         savePenAction.triggered.connect(self.savePenAction)
-        reloadResourcesAction = QtGui.QAction('reload resources', self)
+        reloadResourcesAction = QtWidgets.QAction('reload resources', self)
         reloadResourcesAction.triggered.connect(self.reloadResourcesAction)
         
         resourcesMenu = menubar.addMenu('Resources')
@@ -489,30 +490,30 @@ class MainWindow(QtGui.QMainWindow):
         
         ### view menu ###
         viewMenu = menubar.addMenu('View')
-        dockWidgets = self.findChildren(QtGui.QDockWidget)
+        dockWidgets = self.findChildren(QtWidgets.QDockWidget)
         for dock in dockWidgets:
             viewMenu.addAction(dock.toggleViewAction())
         viewMenu.addSeparator()
-        self.lockLayoutWidget = QtGui.QAction('Lock Layout', self)
+        self.lockLayoutWidget = QtWidgets.QAction('Lock Layout', self)
         self.lockLayoutWidget.setCheckable(True)
         self.lockLayoutWidget.setChecked(lock)
         self.lockLayoutWidget.toggled.connect(self.lockLayoutAction)
         viewMenu.addAction(self.lockLayoutWidget)
         
         ### shortcuts ###
-        QtGui.QShortcut(QtCore.Qt.Key_Left, self, lambda : self.selectFrame(-1))
-        QtGui.QShortcut(QtCore.Qt.Key_Right, self, lambda : self.selectFrame(1))
-        QtGui.QShortcut(QtCore.Qt.Key_Up, self, lambda : self.selectLayer(-1))
-        QtGui.QShortcut(QtCore.Qt.Key_Down, self, lambda : self.selectLayer(1))
-        QtGui.QShortcut(QtCore.Qt.Key_Space, self, self.timelineWidget.playPauseClicked)
-        QtGui.QShortcut(QtCore.Qt.Key_1, self, toolsDock.widget().penClicked)
-        QtGui.QShortcut(QtCore.Qt.Key_2, self, toolsDock.widget().pipetteClicked)
-        QtGui.QShortcut(QtCore.Qt.Key_3, self, toolsDock.widget().fillClicked)
-        QtGui.QShortcut(QtCore.Qt.Key_4, self, toolsDock.widget().moveClicked)
-        QtGui.QShortcut(QtCore.Qt.Key_5, self, toolsDock.widget().selectClicked)
+        QtWidgets.QShortcut(QtCore.Qt.Key_Left, self, lambda : self.selectFrame(-1))
+        QtWidgets.QShortcut(QtCore.Qt.Key_Right, self, lambda : self.selectFrame(1))
+        QtWidgets.QShortcut(QtCore.Qt.Key_Up, self, lambda : self.selectLayer(-1))
+        QtWidgets.QShortcut(QtCore.Qt.Key_Down, self, lambda : self.selectLayer(1))
+        QtWidgets.QShortcut(QtCore.Qt.Key_Space, self, self.timelineWidget.playPauseClicked)
+        QtWidgets.QShortcut(QtCore.Qt.Key_1, self, toolsDock.widget().penClicked)
+        QtWidgets.QShortcut(QtCore.Qt.Key_2, self, toolsDock.widget().pipetteClicked)
+        QtWidgets.QShortcut(QtCore.Qt.Key_3, self, toolsDock.widget().fillClicked)
+        QtWidgets.QShortcut(QtCore.Qt.Key_4, self, toolsDock.widget().moveClicked)
+        QtWidgets.QShortcut(QtCore.Qt.Key_5, self, toolsDock.widget().selectClicked)
         self.hiddenDock = []
-        QtGui.QShortcut(QtCore.Qt.Key_Tab, self, self.hideDock)
-        QtGui.QShortcut(QtCore.Qt.Key_E, self, self.project.changeColor)
+        QtWidgets.QShortcut(QtCore.Qt.Key_Tab, self, self.hideDock)
+        QtWidgets.QShortcut(QtCore.Qt.Key_E, self, self.project.changeColor)
         
         ### settings ###
         try:
@@ -562,7 +563,7 @@ class MainWindow(QtGui.QMainWindow):
             self.saveAsAction()
 
     def importAsNewAction(self):
-        urls = QtGui.QFileDialog.getOpenFileNames(
+        urls = QtWidgets.QFileDialog.getOpenFileNames(
                     None, "Import PNG and GIF", 
                     self.project.dirUrl or os.path.expanduser("~"), 
                     "PNG and GIF files (*.png *.gif);;All files (*)")
@@ -577,7 +578,7 @@ class MainWindow(QtGui.QMainWindow):
             self.project.updateTimelineSign.emit()
             
     def importAsLayerAction(self):
-        urls = QtGui.QFileDialog.getOpenFileNames(
+        urls = QtWidgets.QFileDialog.getOpenFileNames(
                     None, "Import PNG and GIF", 
                     self.project.dirUrl or os.path.expanduser("~"), 
                     "PNG and GIF files (*.png *.gif);;All files (*)")
@@ -601,12 +602,12 @@ class MainWindow(QtGui.QMainWindow):
     def closeEvent(self, event):
         ret = True
         if not self.project.saved:
-            message = QtGui.QMessageBox()
+            message = QtWidgets.QMessageBox()
             message.setWindowTitle("Quit?")
             message.setText("Are you sure you want to quit?");
-            message.setIcon(QtGui.QMessageBox.Warning)
-            message.addButton("Cancel", QtGui.QMessageBox.RejectRole)
-            message.addButton("Yes", QtGui.QMessageBox.AcceptRole)
+            message.setIcon(QtWidgets.QMessageBox.Warning)
+            message.addButton("Cancel", QtWidgets.QMessageBox.RejectRole)
+            message.addButton("Yes", QtWidgets.QMessageBox.AcceptRole)
             ret = message.exec_();
         if ret:
             settings = QtCore.QSettings()
@@ -651,7 +652,7 @@ class MainWindow(QtGui.QMainWindow):
             self.project.updateViewSign.emit()
             
     def replacePaletteAction(self):
-        url = QtGui.QFileDialog.getOpenFileName(None, "open palette file", 
+        url = QtWidgets.QFileDialog.getOpenFileName(None, "open palette file", 
                 os.path.join("resources", "palette"), "Palette files (*.pal, *.gpl );;All files (*)")
         if url:
             pal = import_palette(url, len(self.project.colorTable))
@@ -719,26 +720,26 @@ class MainWindow(QtGui.QMainWindow):
         
     ######## View menu ##############################################
     def lockLayoutAction(self, check):
-        for dock in self.findChildren(QtGui.QDockWidget):
+        for dock in self.findChildren(QtWidgets.QDockWidget):
             dock.lock(check)
     
     def hideDock(self):
         hide = False
-        for dock in self.findChildren(QtGui.QDockWidget):
+        for dock in self.findChildren(QtWidgets.QDockWidget):
             if dock.isVisible():
                 hide = True
         if hide:
             self.hiddenDock = []
-            for dock in self.findChildren(QtGui.QDockWidget):
+            for dock in self.findChildren(QtWidgets.QDockWidget):
                 if dock.isVisible():
                     self.hiddenDock.append(dock.objectName())
                     dock.hide()
         elif self.hiddenDock:
-            for dock in self.findChildren(QtGui.QDockWidget):
+            for dock in self.findChildren(QtWidgets.QDockWidget):
                 if dock.objectName() in self.hiddenDock:
                     dock.show()
         else:
-            for dock in self.findChildren(QtGui.QDockWidget):
+            for dock in self.findChildren(QtWidgets.QDockWidget):
                 dock.show()
             
     ######## Shortcuts #################################################
@@ -791,7 +792,7 @@ class MainWindow(QtGui.QMainWindow):
             event.ignore()
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(QtGui.QPixmap("icons/pixeditor.png")))
     mainWin = MainWindow()
     sys.exit(app.exec_())

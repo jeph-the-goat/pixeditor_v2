@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from widget import Button
 
 
-class ColorWidget(QtGui.QWidget):
+class ColorWidget(QtWidgets.QWidget):
     """ widget for alpha and current color, select on clic"""
     def __init__(self, color, parent):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.parent = parent
         self.setFixedSize(26, 26)
         self.background = QtGui.QBrush(self.parent.project.bgColor)
@@ -52,19 +53,19 @@ class ColorWidget(QtGui.QWidget):
                 # just to be sure alpha is the first color
                 p.fillRect(5, 5, 16, 16, QtGui.QBrush(
                     QtGui.QColor().fromRgba(self.parent.project.colorTable[0])))
-        return QtGui.QWidget.event(self, event)
+        return QtWidgets.QWidget.event(self, event)
 
     
-class PenWidget(QtGui.QWidget):
+class PenWidget(QtWidgets.QWidget):
     """ widget for pen, menu on clic """
     def __init__(self, parent, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.parent = parent
         self.project = project
         self.setToolTip("pen")
         self.setFixedSize(26, 26)
         self.project.updateBackgroundSign.connect(self.update)
-        self.penMenu = QtGui.QMenu(self)
+        self.penMenu = QtWidgets.QMenu(self)
         self.currentAction = None
         self.loadPen()
         self.project.customPenSign.connect(self.setCustomPen)
@@ -73,7 +74,7 @@ class PenWidget(QtGui.QWidget):
         self.customAction = None
         self.penMenu.clear()
         for name, icon in self.project.penList:
-            action = QtGui.QAction(QtGui.QIcon(icon), name, self)
+            action = QtWidgets.QAction(QtGui.QIcon(icon), name, self)
             action.pixmap = icon
             action.setIconVisibleInMenu(True)
             self.penMenu.addAction(action)
@@ -93,7 +94,7 @@ class PenWidget(QtGui.QWidget):
                     QtGui.QBrush(self.project.bgColor))
             if self.currentAction.pixmap:
                 p.drawPixmap(5, 5, self.currentAction.pixmap)
-        return QtGui.QWidget.event(self, event)
+        return QtWidgets.QWidget.event(self, event)
         
     def changePen(self):
         self.penMenu.setActiveAction(self.currentAction)
@@ -123,23 +124,23 @@ class PenWidget(QtGui.QWidget):
             self.update()
 
 
-class BrushWidget(QtGui.QWidget):
+class BrushWidget(QtWidgets.QWidget):
     """ widget for brush, menu on clic """
     def __init__(self, parent, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.parent = parent
         self.project = project
         self.setToolTip("brush")
         self.setFixedSize(26, 26)
         self.project.updateBackgroundSign.connect(self.update)
-        self.brushMenu = QtGui.QMenu(self)
+        self.brushMenu = QtWidgets.QMenu(self)
         self.currentAction = None
         self.loadBrush()
 
     def loadBrush(self):
         self.brushMenu.clear()
         for name, icon in self.project.brushList:
-            action = QtGui.QAction(QtGui.QIcon(icon), name, self)
+            action = QtWidgets.QAction(QtGui.QIcon(icon), name, self)
             action.pixmap = icon
             action.setIconVisibleInMenu(True)
             self.brushMenu.addAction(action)
@@ -157,7 +158,7 @@ class BrushWidget(QtGui.QWidget):
                     QtGui.QBrush(self.project.bgColor))
             if self.currentAction.pixmap:
                 p.drawPixmap(5, 5, self.currentAction.pixmap)
-        return QtGui.QWidget.event(self, event)
+        return QtWidgets.QWidget.event(self, event)
         
     def changeBrush(self):
         self.brushMenu.setActiveAction(self.currentAction)
@@ -168,21 +169,21 @@ class BrushWidget(QtGui.QWidget):
             self.update()
 
             
-class OptionFill(QtGui.QWidget):
+class OptionFill(QtWidgets.QWidget):
     """ contextual option for the fill tool """
     def __init__(self, parent, project):
-        QtGui.QVBoxLayout .__init__(self)
+        QtWidgets.QVBoxLayout .__init__(self)
         self.project = project
         self.parent = parent
         
-        self.adjacentFillRadio = QtGui.QRadioButton("adjacent colors", self)
+        self.adjacentFillRadio = QtWidgets.QRadioButton("adjacent colors", self)
         self.adjacentFillRadio.pressed.connect(self.adjacentPressed)
         self.adjacentFillRadio.setChecked(True)
-        self.similarFillRadio = QtGui.QRadioButton("similar colors", self)
+        self.similarFillRadio = QtWidgets.QRadioButton("similar colors", self)
         self.similarFillRadio.pressed.connect(self.similarPressed)
         
         ### Layout ###
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(0)
         layout.addWidget(self.adjacentFillRadio)
         layout.addWidget(self.similarFillRadio)
@@ -197,20 +198,20 @@ class OptionFill(QtGui.QWidget):
         self.project.fillMode = "similar"
         
         
-class OptionSelect(QtGui.QWidget):
+class OptionSelect(QtWidgets.QWidget):
     """ contextual option for the select tool """
     def __init__(self, parent, project):
-        QtGui.QVBoxLayout .__init__(self)
+        QtWidgets.QVBoxLayout .__init__(self)
         self.project = project
         
-        self.cutFillRadio = QtGui.QRadioButton("cut", self)
+        self.cutFillRadio = QtWidgets.QRadioButton("cut", self)
         self.cutFillRadio.pressed.connect(self.cutPressed)
         self.cutFillRadio.setChecked(True)
-        self.copyFillRadio = QtGui.QRadioButton("copy", self)
+        self.copyFillRadio = QtWidgets.QRadioButton("copy", self)
         self.copyFillRadio.pressed.connect(self.copyPressed)
         
         ### Layout ###
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(0)
         layout.addWidget(self.cutFillRadio)
         layout.addWidget(self.copyFillRadio)
@@ -225,20 +226,20 @@ class OptionSelect(QtGui.QWidget):
         self.project.selectMode = "copy"
 
 
-class OptionMove(QtGui.QWidget):
+class OptionMove(QtWidgets.QWidget):
     """ contextual option for the select tool """
     def __init__(self, parent, project):
-        QtGui.QVBoxLayout .__init__(self)
+        QtWidgets.QVBoxLayout .__init__(self)
         self.project = project
         
-        self.noWrapRadio = QtGui.QRadioButton("no wrap", self)
+        self.noWrapRadio = QtWidgets.QRadioButton("no wrap", self)
         self.noWrapRadio.pressed.connect(self.noWrapPressed)
         self.noWrapRadio.setChecked(True)
-        self.wrapRadio = QtGui.QRadioButton("wrap", self)
+        self.wrapRadio = QtWidgets.QRadioButton("wrap", self)
         self.wrapRadio.pressed.connect(self.wrapPressed)
         
         ### Layout ###
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(0)
         layout.addWidget(self.noWrapRadio)
         layout.addWidget(self.wrapRadio)
@@ -253,10 +254,10 @@ class OptionMove(QtGui.QWidget):
         self.project.moveMode = "wrap"
 
 
-class OptionsWidget(QtGui.QWidget):
+class OptionsWidget(QtWidgets.QWidget):
     """ widget cantaining options """
     def __init__(self, project):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.project = project
 
         self.penWidget = PenWidget(self, self.project)
@@ -272,7 +273,7 @@ class OptionsWidget(QtGui.QWidget):
         self.project.toolChangedSign.connect(self.toolChanged)
 
         ### Layout ###
-        context = QtGui.QHBoxLayout()
+        context = QtWidgets.QHBoxLayout()
         context.setSpacing(8)
         context.addWidget(self.alphaWidget)
         context.addWidget(self.colorWidget)
@@ -282,7 +283,7 @@ class OptionsWidget(QtGui.QWidget):
         context.addWidget(self.penWidget)
         context.addWidget(self.brushWidget)
         context.setContentsMargins(0, 0, 0, 0)
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(4)
         layout.addLayout(context)
         layout.addWidget(self.optionFill)
