@@ -1,0 +1,50 @@
+[project]
+name = "pixeditor-v2"
+version = "0.1.0"
+description = "An animated pixel art editor released under the GNU GPL V3"
+readme = "README.md"
+license = { file = "COPYING" }
+requires-python = ">=3.8"
+authors = [{ name = "Nicolas Bougère", email = "nicolas.bougere@z-uo.com" }]
+keywords = ["pixel-art", "editor", "animation", "pyqt"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = ["pyqt5>=5.15.0"]
+
+[project.optional-dependencies]
+gif-export = ["pillow>=9.0.0"]
+
+[project.scripts]
+pixeditor = "main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "pytest-qt>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.black]
+line-length = 100
+target-version = ["py38"]
