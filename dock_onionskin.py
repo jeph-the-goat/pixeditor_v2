@@ -7,14 +7,7 @@ from PyQt5 import QtWidgets
 
 from widget import Button
 from colorPicker import ColorDialog
-"""
-        self.onionSkin = {"check"      : False,
-                          "color"      : False,
-                          "prev_color" : QtGui.QColor(255, 0, 0),
-                          "prev"       : [[True, 0.5], [False, 0.25], [False, 0.125]],
-                          "next_color" : QtGui.QColor(0, 0, 255),
-                          "next"       : [[True, 0.5], [False, 0.25], [False, 0.125]]}
-"""
+
 class OnionSkinWidget(QtWidgets.QWidget):
     def __init__(self, project):
         QtWidgets.QWidget.__init__(self)
