@@ -204,32 +204,49 @@ def export_png(project, fullUrl=""):
     os.system("%s -delay 1/%s -dispose Background -loop 0 %s*.png %s.gif" %(convertCommand, project.fps, url, url))
     return fullUrl
     
+import re
+from PyQt5 import QtGui  # or PySide2.QtGui
+
+def read_palette_file(path):
+    """Read the palette file and return all lines."""
+    with open(path, "r") as file:
+        return file.readlines()
+
+def extract_rgb_triplets(lines):
+    """
+    From a list of lines, extract valid RGB triplets as tuples of integers.
+    Skips lines that don't start with 3 numbers.
+    """
+    rgb_values = []
+    for line in lines:
+        match = re.match(r"\s*(\d+)\s+(\d+)\s+(\d+)", line)
+        if match:
+            rgb = tuple(map(int, match.groups()))
+            rgb_values.append(rgb)
+    return rgb_values
+
+def convert_to_qcolors(rgb_values, allow_only_one_black=True):
+    """
+    Convert a list of RGB tuples to QtGui.QColor RGB values.
+    Optionally allow only one black ([0, 0, 0]) color.
+    """
+    colors = [QtGui.QColor(0, 0, 0, 0).rgba()]  # transparent
+    black_seen = False
+    for r, g, b in rgb_values:
+        if [r, g, b] == [0, 0, 0]:
+            if black_seen and allow_only_one_black:
+                continue
+            black_seen = True
+        colors.append(QtGui.QColor(r, g, b).rgb())
+    return colors
+
 def import_palette(url):
-    """ take a file palette (.gpl or .pal) and return a list of QRgba """
-    save = open(url, "r")
-    palette = []
-    for line in save.readlines():
-        palette.append([""])
-        for char in line:
-            if char.isdigit():
-                palette[-1][-1] += char
-            else:
-                if len(palette[-1]) == 3 and palette[-1][-1] != "":
-                    break
-                if palette[-1][-1] != "":
-                    palette[-1].append("")
-    pal = [QtGui.QColor(0, 0, 0, 0).rgba()]
-    black = False
-    for i in palette:
-        if len(i) == 3 and i[0] and i[1] and i[2]:
-            # avoid to fill palette of black as in some pal files
-            if i == ["0", "0", "0"]:
-                if black:
-                    continue
-                black = True
-            pal.append(QtGui.QColor(int(i[0]), int(i[1]), int(i[2])).rgb())
-    save.close()
-    return pal
+    """Main function that loads a .pal or .gpl file and returns a list of QRgba values."""
+    lines = read_palette_file(url)
+    rgb_triplets = extract_rgb_triplets(lines)
+    palette = convert_to_qcolors(rgb_triplets)
+    return palette
+
     
 def export_palette(pal):
     """take a list of QRgb and write a palette file .pal
