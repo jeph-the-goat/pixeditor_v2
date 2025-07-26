@@ -738,9 +738,6 @@ class MainWindow(QtWidgets.QMainWindow):
             for dock in self.findChildren(QtWidgets.QDockWidget):
                 if dock.objectName() in self.hiddenDock:
                     dock.show()
-        else:
-            for dock in self.findChildren(QtWidgets.QDockWidget):
-                dock.show()
             
     ######## Shortcuts #################################################
     def selectFrame(self, n):
