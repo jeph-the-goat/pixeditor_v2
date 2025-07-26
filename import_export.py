@@ -204,7 +204,7 @@ def export_png(project, fullUrl=""):
     os.system("%s -delay 1/%s -dispose Background -loop 0 %s*.png %s.gif" %(convertCommand, project.fps, url, url))
     return fullUrl
     
-def import_palette(url, nColor=0):
+def import_palette(url):
     """ take a file palette (.gpl or .pal) and return a list of QRgba """
     save = open(url, "r")
     palette = []
