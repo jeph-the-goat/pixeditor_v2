@@ -77,14 +77,6 @@ class SatVal(QtWidgets.QGraphicsView):
         self.pointer.setPos(posX, posY)
         self.parent.sat_val_changed(posY, posX)
         
-    def mousePressEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
-            self.move(event.pos())
-            
-    def mouseMoveEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
-            self.move(event.pos())
-        
         
 class Hue(QtWidgets.QGraphicsView):
     def __init__(self, parent, H):
@@ -130,14 +122,6 @@ class Hue(QtWidgets.QGraphicsView):
             posY = 255
         self.pointer.setPos(0, posY)
         self.parent.hue_changed(round(posY / 256 * 360))
-        
-    def mousePressEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
-            self.move(event.pos())
-            
-    def mouseMoveEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
-            self.move(event.pos())
         
         
 class Alpha(QtWidgets.QGraphicsView):
