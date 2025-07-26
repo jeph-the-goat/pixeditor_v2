@@ -489,9 +489,5 @@ class RenameLayerDialog(QtWidgets.QDialog):
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    #~ mainWin = RenameLayerDialog("layer 1")
     mainWin = ResizeDialog(QtCore.QSize(24, 32))
-    #~ mainWin = NewDialog()
-    #~ mainWin = BackgroundDialog(QtGui.QColor(150, 150, 150), "pattern/iso_20x11.png")
-    #~ mainWin = BackgroundDialog()
     sys.exit(app.exec_())
